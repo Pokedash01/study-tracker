@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  const SUPABASE_URL = "https://lvzvlpbzmktotmjhjysw.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2enZscGJ6bWt0b3RtamhqeXN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDg0NTAsImV4cCI6MjA5NDA4NDQ1MH0.8nx97czMDbUIzbgNKaF_udfynLr7Lfnyl8al4dAuPp8";
 
-const supabaseClient = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<head>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
   <title>PL-400 + AI-102 Study Tracker</title>
 
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -23,7 +23,23 @@ const supabaseClient = supabase.createClient(
     rel="stylesheet"
   >
 
+  <script>
+
+    const SUPABASE_URL =
+      "https://lvzvlpbzmktotmjhjysw.supabase.co";
+
+    const SUPABASE_ANON_KEY =
+      "PASTE_YOUR_ANON_KEY_HERE";
+
+    const supabaseClient = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+  </script>
+
   <style>
+
     * {
       font-family: 'Inter', sans-serif;
     }
@@ -33,6 +49,7 @@ const supabaseClient = supabase.createClient(
         radial-gradient(circle at top left, rgba(99,102,241,0.15), transparent 30%),
         radial-gradient(circle at bottom right, rgba(168,85,247,0.15), transparent 30%),
         #0f172a;
+
       color: white;
     }
 
@@ -40,6 +57,7 @@ const supabaseClient = supabase.createClient(
       background: rgba(255,255,255,0.08);
       backdrop-filter: blur(18px);
       border: 1px solid rgba(255,255,255,0.12);
+
       box-shadow:
         0 8px 32px rgba(0,0,0,0.25),
         inset 0 1px 0 rgba(255,255,255,0.06);
@@ -57,8 +75,8 @@ const supabaseClient = supabase.createClient(
     }
 
     ::-webkit-scrollbar {
-      height: 8px;
       width: 8px;
+      height: 8px;
     }
 
     ::-webkit-scrollbar-thumb {
@@ -90,7 +108,9 @@ const supabaseClient = supabase.createClient(
     .table-row:hover {
       background: rgba(255,255,255,0.03);
     }
+
   </style>
+
 </head>
 
 <body class="min-h-screen p-4 md:p-8">
@@ -106,6 +126,7 @@ const supabaseClient = supabase.createClient(
       <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
 
         <div>
+
           <p class="uppercase tracking-[0.3em] text-xs text-indigo-300 mb-3">
             Certification Roadmap
           </p>
@@ -115,12 +136,13 @@ const supabaseClient = supabase.createClient(
           </h1>
 
           <p class="text-slate-300 mt-4 max-w-2xl leading-relaxed">
-            A modern study dashboard to track your Microsoft Power Platform
-            Developer and Azure AI Engineer certification journey.
+            Track your Microsoft certification journey beautifully.
           </p>
+
         </div>
 
         <div class="glass rounded-2xl p-6 min-w-[240px]">
+
           <p class="text-sm text-slate-400 mb-2">
             Overall Completion
           </p>
@@ -130,15 +152,19 @@ const supabaseClient = supabase.createClient(
           </div>
 
           <div class="mt-4 h-3 bg-white/10 rounded-full overflow-hidden">
+
             <div
               id="heroBar"
               class="h-full rounded-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 progress-glow transition-all duration-500"
               style="width:0%"
             ></div>
+
           </div>
+
         </div>
 
       </div>
+
     </div>
 
     <!-- STATS -->
@@ -146,12 +172,9 @@ const supabaseClient = supabase.createClient(
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
 
       <div class="glass hover-card rounded-3xl p-6">
-        <p class="text-sm text-slate-400">Completed Tasks</p>
+        <p class="text-sm text-slate-400">Completed</p>
 
-        <h2
-          id="completedCount"
-          class="text-4xl font-bold mt-3"
-        >
+        <h2 id="completedCount" class="text-4xl font-bold mt-3">
           0
         </h2>
       </div>
@@ -159,32 +182,23 @@ const supabaseClient = supabase.createClient(
       <div class="glass hover-card rounded-3xl p-6">
         <p class="text-sm text-slate-400">Total Tasks</p>
 
-        <h2
-          id="totalCount"
-          class="text-4xl font-bold mt-3"
-        >
+        <h2 id="totalCount" class="text-4xl font-bold mt-3">
           0
         </h2>
       </div>
 
       <div class="glass hover-card rounded-3xl p-6">
-        <p class="text-sm text-slate-400">PL-400 Progress</p>
+        <p class="text-sm text-slate-400">PL-400</p>
 
-        <h2
-          id="plProgress"
-          class="text-4xl font-bold mt-3 text-blue-400"
-        >
+        <h2 id="plProgress" class="text-4xl font-bold mt-3 text-blue-400">
           0%
         </h2>
       </div>
 
       <div class="glass hover-card rounded-3xl p-6">
-        <p class="text-sm text-slate-400">AI-102 Progress</p>
+        <p class="text-sm text-slate-400">AI-102</p>
 
-        <h2
-          id="aiProgress"
-          class="text-4xl font-bold mt-3 text-purple-400"
-        >
+        <h2 id="aiProgress" class="text-4xl font-bold mt-3 text-purple-400">
           0%
         </h2>
       </div>
@@ -196,13 +210,14 @@ const supabaseClient = supabase.createClient(
     <div class="glass rounded-3xl p-6 mb-8">
 
       <div class="flex justify-between items-center mb-4">
+
         <div>
           <h3 class="text-xl font-semibold">
             Overall Progress
           </h3>
 
           <p class="text-slate-400 text-sm mt-1">
-            Keep going — consistency compounds.
+            Keep building momentum.
           </p>
         </div>
 
@@ -212,14 +227,17 @@ const supabaseClient = supabase.createClient(
         >
           0%
         </span>
+
       </div>
 
       <div class="w-full h-5 bg-white/10 rounded-full overflow-hidden">
+
         <div
           id="overallBar"
           class="h-full rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 progress-glow transition-all duration-500"
           style="width:0%"
         ></div>
+
       </div>
 
     </div>
@@ -270,282 +288,6 @@ const weeks = [
           "Study Azure OpenAI Service",
           "Deploy GPT model"
         ]
-      },
-      {
-        day: "Thu",
-        pl: [
-          "Study Power Automate",
-          "Build approval flow"
-        ],
-        ai: [
-          "Study Computer Vision",
-          "Analyze image via API"
-        ]
-      },
-      {
-        day: "Fri",
-        pl: [
-          "Study Dataverse",
-          "Practice relationships"
-        ],
-        ai: [
-          "Study Speech services",
-          "Build language detection SDK call"
-        ]
-      },
-      {
-        day: "Sat",
-        pl: [
-          "Take PL-900 mock test"
-        ],
-        ai: [
-          "Complete Intro to AI on Azure module"
-        ]
-      },
-      {
-        day: "Sun",
-        pl: [
-          "Review PL notes"
-        ],
-        ai: [
-          "Review AI notes"
-        ]
-      }
-    ]
-  },
-
-  {
-    week: "Week 2",
-    title: "PL-400 deep dive + integrations",
-    days: [
-      {
-        day: "Mon",
-        pl: [
-          "Study PCF lifecycle",
-          "Build Hello World PCF"
-        ],
-        ai: [
-          "Study Form Recognizer",
-          "Extract invoice fields"
-        ]
-      },
-      {
-        day: "Tue",
-        pl: [
-          "Study PCF advanced topics",
-          "Build chart component"
-        ],
-        ai: [
-          "Build FAQ bot",
-          "Study Language Studio"
-        ]
-      },
-      {
-        day: "Wed",
-        pl: [
-          "Study custom connectors",
-          "Connect public API"
-        ],
-        ai: [
-          "Study Bot Framework",
-          "Map AI concepts to projects"
-        ]
-      },
-      {
-        day: "Thu",
-        pl: [
-          "Study ALM",
-          "Practice solution deployment"
-        ],
-        ai: [
-          "Study Responsible AI",
-          "Study pricing and quotas"
-        ]
-      },
-      {
-        day: "Fri",
-        pl: [
-          "Study Power Pages",
-          "Build Power Pages site"
-        ],
-        ai: [
-          "Study Cognitive Search",
-          "Index documents"
-        ]
-      },
-      {
-        day: "Sat",
-        pl: [
-          "Take PL-400 practice test"
-        ],
-        ai: [
-          "Take AI-102 practice test"
-        ]
-      },
-      {
-        day: "Sun",
-        pl: [
-          "Review weak PCF topics"
-        ],
-        ai: [
-          "Review Cognitive Search gaps"
-        ]
-      }
-    ]
-  },
-
-  {
-    week: "Week 3",
-    title: "AI-102 deep dive + PL-400 scenarios",
-    days: [
-      {
-        day: "Mon",
-        pl: [
-          "Study desktop flows",
-          "Build automation flow"
-        ],
-        ai: [
-          "Study Azure ML",
-          "Run AutoML experiment"
-        ]
-      },
-      {
-        day: "Tue",
-        pl: [
-          "Study AI Builder",
-          "Build AI-powered app"
-        ],
-        ai: [
-          "Study Application Insights",
-          "Study diagnostics"
-        ]
-      },
-      {
-        day: "Wed",
-        pl: [
-          "Study Dataverse for Teams",
-          "Practice labs"
-        ],
-        ai: [
-          "Study knowledge mining",
-          "Complete AI walkthrough"
-        ]
-      },
-      {
-        day: "Thu",
-        pl: [
-          "Solve PL-400 case studies",
-          "Review weak areas"
-        ],
-        ai: [
-          "Study authentication",
-          "Secure Cognitive endpoint"
-        ]
-      },
-      {
-        day: "Fri",
-        pl: [
-          "Study Dynamics 365 extensions",
-          "Practice PL-400 questions"
-        ],
-        ai: [
-          "Study Translator services",
-          "Practice AI-102 questions"
-        ]
-      },
-      {
-        day: "Sat",
-        pl: [
-          "Take PL-400 full mock"
-        ],
-        ai: [
-          "Take AI-102 full mock"
-        ]
-      },
-      {
-        day: "Sun",
-        pl: [
-          "Light review"
-        ],
-        ai: [
-          "Watch AI-102 cram video"
-        ]
-      }
-    ]
-  },
-
-  {
-    week: "Week 4",
-    title: "Final revision + exams",
-    days: [
-      {
-        day: "Mon",
-        pl: [
-          "Revise weakest PL-400 topics",
-          "Solve timed questions"
-        ],
-        ai: [
-          "Revise weakest AI topics",
-          "Solve timed questions"
-        ]
-      },
-      {
-        day: "Tue",
-        pl: [
-          "Take PL-400 mock #3"
-        ],
-        ai: [
-          "Take AI-102 mock #3"
-        ]
-      },
-      {
-        day: "Wed",
-        pl: [
-          "Final PL-400 revision",
-          "Review flashcards"
-        ],
-        ai: [
-          "Final AI-102 revision",
-          "Review flashcards"
-        ]
-      },
-      {
-        day: "Thu",
-        pl: [
-          "Book PL-400 exam",
-          "Light revision only"
-        ],
-        ai: [
-          "Book AI-102 exam",
-          "Rest and recover"
-        ]
-      },
-      {
-        day: "Fri",
-        pl: [
-          "Take PL-400 exam"
-        ],
-        ai: [
-          "Take AI-102 exam"
-        ]
-      },
-      {
-        day: "Sat",
-        pl: [
-          "Update LinkedIn and resume"
-        ],
-        ai: [
-          "Add certification badges"
-        ]
-      },
-      {
-        day: "Sun",
-        pl: [
-          "Apply for Power Platform roles"
-        ],
-        ai: [
-          "Update LinkedIn headline"
-        ]
       }
     ]
   }
@@ -573,16 +315,16 @@ function createTask(task, id, type) {
   const checked = saved[id] || false;
 
   if(checked) {
+
     completedTasks++;
 
     if(type === "pl") plDone++;
     else aiDone++;
+
   }
 
   return `
-    <label
-      class="flex items-start gap-4 mb-4 cursor-pointer group"
-    >
+    <label class="flex items-start gap-4 mb-4 cursor-pointer group">
 
       <input
         type="checkbox"
@@ -605,144 +347,157 @@ function createTask(task, id, type) {
     </label>
   `;
 }
+
 function renderApp() {
+
+  weeksContainer.innerHTML = "";
+
+  totalTasks = 0;
+  completedTasks = 0;
+  plTotal = 0;
+  aiTotal = 0;
+  plDone = 0;
+  aiDone = 0;
 
   weeks.forEach((week, wi) => {
 
-  const card = document.createElement("div");
+    const card = document.createElement("div");
 
-  card.className =
-    "glass rounded-3xl overflow-hidden";
+    card.className =
+      "glass rounded-3xl overflow-hidden";
 
-  let html = `
-    <div
-      class="
-        px-6 py-5
-        border-b border-white/10
-        bg-gradient-to-r
-        from-indigo-500/10
-        to-purple-500/10
-      "
-    >
+    let html = `
+      <div
+        class="
+          px-6 py-5
+          border-b border-white/10
+          bg-gradient-to-r
+          from-indigo-500/10
+          to-purple-500/10
+        "
+      >
 
-      <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between">
 
-        <div>
-          <h2 class="text-2xl font-bold">
-            ${week.week}
-          </h2>
+          <div>
 
-          <p class="text-slate-300 mt-2">
-            ${week.title}
-          </p>
-        </div>
+            <h2 class="text-2xl font-bold">
+              ${week.week}
+            </h2>
 
-        <div
-          class="
-            hidden md:flex
-            items-center justify-center
-            w-14 h-14
-            rounded-2xl
-            bg-white/10
-            text-2xl
-          "
-        >
-          🚀
+            <p class="text-slate-300 mt-2">
+              ${week.title}
+            </p>
+
+          </div>
+
+          <div
+            class="
+              hidden md:flex
+              items-center justify-center
+              w-14 h-14
+              rounded-2xl
+              bg-white/10
+              text-2xl
+            "
+          >
+            🚀
+          </div>
+
         </div>
 
       </div>
-    </div>
 
-    <div class="overflow-x-auto">
+      <div class="overflow-x-auto">
 
-      <table class="w-full min-w-[760px]">
+        <table class="w-full min-w-[760px]">
 
-        <thead>
+          <thead>
 
-          <tr class="text-left bg-white/5">
+            <tr class="text-left bg-white/5">
 
-            <th class="p-5 border-b border-white/10 w-28">
-              Day
-            </th>
+              <th class="p-5 border-b border-white/10 w-28">
+                Day
+              </th>
 
-            <th class="p-5 border-b border-white/10">
-              PL-400
-            </th>
+              <th class="p-5 border-b border-white/10">
+                PL-400
+              </th>
 
-            <th class="p-5 border-b border-white/10">
-              AI-102
-            </th>
+              <th class="p-5 border-b border-white/10">
+                AI-102
+              </th>
 
-          </tr>
+            </tr>
 
-        </thead>
+          </thead>
 
-        <tbody>
-  `;
+          <tbody>
+    `;
 
-  week.days.forEach((day, di) => {
+    week.days.forEach((day, di) => {
+
+      html += `
+        <tr class="table-row transition-all duration-200">
+
+          <td
+            class="
+              p-5 border-b border-white/5
+              align-top font-semibold text-indigo-300
+            "
+          >
+            ${day.day}
+          </td>
+
+          <td
+            class="
+              p-5 border-b border-white/5
+              align-top
+            "
+          >
+            ${day.pl.map((task, ti) =>
+              createTask(
+                task,
+                `pl-${wi}-${di}-${ti}`,
+                "pl"
+              )
+            ).join("")}
+          </td>
+
+          <td
+            class="
+              p-5 border-b border-white/5
+              align-top
+            "
+          >
+            ${day.ai.map((task, ti) =>
+              createTask(
+                task,
+                `ai-${wi}-${di}-${ti}`,
+                "ai"
+              )
+            ).join("")}
+          </td>
+
+        </tr>
+      `;
+    });
 
     html += `
-      <tr class="table-row transition-all duration-200">
+          </tbody>
 
-        <td
-          class="
-            p-5 border-b border-white/5
-            align-top font-semibold text-indigo-300
-          "
-        >
-          ${day.day}
-        </td>
+        </table>
 
-        <td
-          class="
-            p-5 border-b border-white/5
-            align-top
-          "
-        >
-          ${day.pl.map((task, ti) =>
-            createTask(
-              task,
-              `pl-${wi}-${di}-${ti}`,
-              "pl"
-            )
-          ).join("")}
-        </td>
-
-        <td
-          class="
-            p-5 border-b border-white/5
-            align-top
-          "
-        >
-          ${day.ai.map((task, ti) =>
-            createTask(
-              task,
-              `ai-${wi}-${di}-${ti}`,
-              "ai"
-            )
-          ).join("")}
-        </td>
-
-      </tr>
+      </div>
     `;
+
+    card.innerHTML = html;
+
+    weeksContainer.appendChild(card);
+
   });
 
-  html += `
-        </tbody>
-
-      </table>
-
-    </div>
-  `;
-
-  card.innerHTML = html;
-
-  weeksContainer.appendChild(card);
-});
-
 }
-
 
 async function loadProgress() {
 
@@ -759,8 +514,11 @@ async function loadProgress() {
   }
 
   renderApp();
+
+  updateUI();
+
 }
-  
+
 function updateUI() {
 
   const overall =
@@ -795,6 +553,7 @@ function updateUI() {
 
   document.getElementById("heroBar").style.width =
     `${overall}%`;
+
 }
 
 function toggleTask(id, type, checkbox) {
@@ -822,22 +581,24 @@ function toggleTask(id, type, checkbox) {
     else aiDone--;
 
     label.classList.remove("task-complete");
+
   }
 
- supabaseClient
-  .from("study_progress")
-  .upsert({
-    id: id,
-    completed: checkbox.checked
-  })
-  .then(() => {
-    console.log("Saved");
-  });
+  supabaseClient
+    .from("study_progress")
+    .upsert({
+      id: id,
+      completed: checkbox.checked
+    })
+    .then(() => {
+      console.log("Saved");
+    });
 
-  loadProgress();
+  updateUI();
+
 }
 
-updateUI();
+loadProgress();
 
 </script>
 
