@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PL-400 + AI-102 Study Tracker</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      background: #f3f4f6;
+    }
+
+    .task-complete {
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen p-4 md:p-8">
+
+  <div class="max-w-7xl mx-auto">
+
+    <div class="bg-white rounded-2xl shadow-sm border p-6 mb-6">
+      <h1 class="text-3xl font-bold text-gray-900">
+        PL-400 + AI-102 Study Tracker
+      </h1>
+
+      <p class="text-gray-600 mt-2">
+        Track your certification preparation on desktop and mobile.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+
+      <div class="bg-white rounded-2xl border p-5">
+        <p class="text-sm text-gray-500">Completed</p>
+        <h2 id="completedCount" class="text-3xl font-bold mt-2">0</h2>
+      </div>
+
+      <div class="bg-white rounded-2xl border p-5">
+        <p class="text-sm text-gray-500">Total Tasks</p>
+        <h2 id="totalCount" class="text-3xl font-bold mt-2">0</h2>
+      </div>
+
+      <div class="bg-white rounded-2xl border p-5">
+        <p class="text-sm text-gray-500">PL-400</p>
+        <h2 id="plProgress" class="text-3xl font-bold mt-2">0%</h2>
+      </div>
+
+      <div class="bg-white rounded-2xl border p-5">
+        <p class="text-sm text-gray-500">AI-102</p>
+        <h2 id="aiProgress" class="text-3xl font-bold mt-2">0%</h2>
+      </div>
+
+    </div>
+
+    <div class="bg-white rounded-2xl border p-5 mb-6">
+      <div class="flex justify-between mb-2">
+        <span class="font-medium">Overall Progress</span>
+        <span id="overallProgressText">0%</span>
+      </div>
+
+      <div class="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+        <div id="overallBar" class="h-full bg-blue-600 rounded-full transition-all duration-300" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div id="weeksContainer" class="space-y-6"></div>
+
+  </div>
+
+<script>
+
+const weeks = [
+  {
+    week: "Week 1",
+    title: "PL-400 foundations + AI-102 overview",
+    days: [
+      {
+        day: "Mon",
+        pl: [
+          "Read PL-400 exam skills outline",
+          "Set up Power Apps dev environment"
+        ],
+        ai: [
+          "Read AI-102 exam skills outline",
+          "Watch Azure AI overview"
+        ]
+      },
+      {
+        day: "Tue",
+        pl: [
+          "Study canvas apps",
+          "Build expense tracker app"
+        ],
+        ai: [
+          "Study Cognitive Services",
+          "Create Text Analytics resource"
+        ]
+      },
+      {
+        day: "Wed",
+        pl: [
+          "Study model-driven apps",
+          "Create model-driven app"
+        ],
+        ai: [
+          "Study Azure OpenAI Service",
+          "Deploy GPT model"
+        ]
+      },
+      {
+        day: "Thu",
+        pl: [
+          "Study Power Automate",
+          "Build approval flow"
+        ],
+        ai: [
+          "Study Computer Vision",
+          "Analyze image via API"
+        ]
+      },
+      {
+        day: "Fri",
+        pl: [
+          "Study Dataverse",
+          "Practice relationships"
+        ],
+        ai: [
+          "Study Speech services",
+          "Build language detection SDK call"
+        ]
+      },
+      {
+        day: "Sat",
+        pl: [
+          "Take PL-900 mock test"
+        ],
+        ai: [
+          "Complete Intro to AI on Azure module"
+        ]
+      },
+      {
+        day: "Sun",
+        pl: [
+          "Review PL notes"
+        ],
+        ai: [
+          "Review AI notes"
+        ]
+      }
+    ]
+  },
+
+  {
+    week: "Week 2",
+    title: "PL-400 deep dive + integrations",
+    days: [
+      {
+        day: "Mon",
+        pl: [
+          "Study PCF lifecycle",
+          "Build Hello World PCF"
+        ],
+        ai: [
+          "Study Form Recognizer",
+          "Extract invoice fields"
+        ]
+      },
+      {
+        day: "Tue",
+        pl: [
+          "Study PCF advanced topics",
+          "Build chart component"
+        ],
+        ai: [
+          "Build FAQ bot",
+          "Study Language Studio"
+        ]
+      },
+      {
+        day: "Wed",
+        pl: [
+          "Study custom connectors",
+          "Connect public API"
+        ],
+        ai: [
+          "Study Bot Framework",
+          "Map AI concepts to projects"
+        ]
+      },
+      {
+        day: "Thu",
+        pl: [
+          "Study ALM",
+          "Practice solution deployment"
+        ],
+        ai: [
+          "Study Responsible AI",
+          "Study pricing and quotas"
+        ]
+      },
+      {
+        day: "Fri",
+        pl: [
+          "Study Power Pages",
+          "Build Power Pages site"
+        ],
+        ai: [
+          "Study Cognitive Search",
+          "Index documents"
+        ]
+      },
+      {
+        day: "Sat",
+        pl: [
+          "Take PL-400 practice test"
+        ],
+        ai: [
+          "Take AI-102 practice test"
+        ]
+      },
+      {
+        day: "Sun",
+        pl: [
+          "Review weak PCF topics"
+        ],
+        ai: [
+          "Review Cognitive Search gaps"
+        ]
+      }
+    ]
+  }
+];
+
+const weeksContainer = document.getElementById("weeksContainer");
+
+let totalTasks = 0;
+let completedTasks = 0;
+let plTotal = 0;
+let aiTotal = 0;
+let plDone = 0;
+let aiDone = 0;
+
+const saved = JSON.parse(localStorage.getItem("studyProgress") || "{}");
+
+function createTask(task, id, type) {
+
+  totalTasks++;
+
+  if(type === "pl") plTotal++;
+  else aiTotal++;
+
+  const checked = saved[id] || false;
+
+  if(checked) {
+    completedTasks++;
+
+    if(type === "pl") plDone++;
+    else aiDone++;
+  }
+
+  return `
+    <label class="flex items-start gap-3 mb-2 cursor-pointer">
+      <input
+        type="checkbox"
+        class="mt-1"
+        ${checked ? "checked" : ""}
+        onchange="toggleTask('${id}', '${type}', this)"
+      />
+
+      <span class="${checked ? 'task-complete' : ''}">
+        ${task}
+      </span>
+    </label>
+  `;
+}
+
+weeks.forEach((week, wi) => {
+
+  const card = document.createElement("div");
+
+  card.className = "bg-white rounded-2xl border overflow-hidden";
+
+  let html = `
+    <div class="bg-gray-50 border-b px-5 py-4">
+      <h2 class="text-xl font-semibold">${week.week}</h2>
+      <p class="text-sm text-gray-600 mt-1">${week.title}</p>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[700px]">
+        <thead>
+          <tr class="bg-gray-100 text-left text-sm">
+            <th class="p-4 border-b w-24">Day</th>
+            <th class="p-4 border-b">PL-400</th>
+            <th class="p-4 border-b">AI-102</th>
+          </tr>
+        </thead>
+
+        <tbody>
+  `;
+
+  week.days.forEach((day, di) => {
+
+    html += `
+      <tr>
+        <td class="p-4 border-b align-top font-medium">
+          ${day.day}
+        </td>
+
+        <td class="p-4 border-b align-top">
+          ${day.pl.map((task, ti) =>
+            createTask(task, `pl-${wi}-${di}-${ti}`, "pl")
+          ).join("")}
+        </td>
+
+        <td class="p-4 border-b align-top">
+          ${day.ai.map((task, ti) =>
+            createTask(task, `ai-${wi}-${di}-${ti}`, "ai")
+          ).join("")}
+        </td>
+      </tr>
+    `;
+  });
+
+  html += `
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  card.innerHTML = html;
+
+  weeksContainer.appendChild(card);
+});
+
+function updateUI() {
+
+  const overall = Math.round((completedTasks / totalTasks) * 100) || 0;
+
+  const plPercent =
+    Math.round((plDone / plTotal) * 100) || 0;
+
+  const aiPercent =
+    Math.round((aiDone / aiTotal) * 100) || 0;
+
+  document.getElementById("completedCount").innerText = completedTasks;
+
+  document.getElementById("totalCount").innerText = totalTasks;
+
+  document.getElementById("plProgress").innerText = `${plPercent}%`;
+
+  document.getElementById("aiProgress").innerText = `${aiPercent}%`;
+
+  document.getElementById("overallProgressText").innerText = `${overall}%`;
+
+  document.getElementById("overallBar").style.width = `${overall}%`;
+}
+
+function toggleTask(id, type, checkbox) {
+
+  const label = checkbox.nextElementSibling;
+
+  if(checkbox.checked) {
+
+    saved[id] = true;
+
+    completedTasks++;
+
+    if(type === "pl") plDone++;
+    else aiDone++;
+
+    label.classList.add("task-complete");
+
+  } else {
+
+    saved[id] = false;
+
+    completedTasks--;
+
+    if(type === "pl") plDone--;
+    else aiDone--;
+
+    label.classList.remove("task-complete");
+  }
+
+  localStorage.setItem(
+    "studyProgress",
+    JSON.stringify(saved)
+  );
+
+  updateUI();
+}
+
+updateUI();
+
+</script>
+
+</body>
+</html>
