@@ -561,9 +561,7 @@ let aiTotal = 0;
 let plDone = 0;
 let aiDone = 0;
 
-const saved = JSON.parse(
-  localStorage.getItem("studyProgress") || "{}"
-);
+const saved = {};
 
 function createTask(task, id, type) {
 
@@ -607,8 +605,9 @@ function createTask(task, id, type) {
     </label>
   `;
 }
+function renderApp() {
 
-weeks.forEach((week, wi) => {
+  weeks.forEach((week, wi) => {
 
   const card = document.createElement("div");
 
@@ -742,6 +741,26 @@ weeks.forEach((week, wi) => {
   weeksContainer.appendChild(card);
 });
 
+}
+
+
+async function loadProgress() {
+
+  const { data, error } = await supabaseClient
+    .from("study_progress")
+    .select("*");
+
+  if(data) {
+
+    data.forEach(item => {
+      saved[item.id] = item.completed;
+    });
+
+  }
+
+  renderApp();
+}
+  
 function updateUI() {
 
   const overall =
@@ -805,12 +824,17 @@ function toggleTask(id, type, checkbox) {
     label.classList.remove("task-complete");
   }
 
-  localStorage.setItem(
-    "studyProgress",
-    JSON.stringify(saved)
-  );
+ supabaseClient
+  .from("study_progress")
+  .upsert({
+    id: id,
+    completed: checkbox.checked
+  })
+  .then(() => {
+    console.log("Saved");
+  });
 
-  updateUI();
+  loadProgress();
 }
 
 updateUI();
