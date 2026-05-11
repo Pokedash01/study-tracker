@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  const SUPABASE_URL = "https://lvzvlpbzmktotmjhjysw.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2enZscGJ6bWt0b3RtamhqeXN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDg0NTAsImV4cCI6MjA5NDA4NDQ1MH0.8nx97czMDbUIzbgNKaF_udfynLr7Lfnyl8al4dAuPp8";
+
+const supabaseClient = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
